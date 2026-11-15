@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+/* Calm, light palette: sea-green, sky and lavender on warm white. */
+@theme {
+  --color-paper: #fbfcf9;
+  --color-mist: #f2f7f5;
+  --color-ink: #1d2b35;
+  --color-muted: #5b6b77;
+  --color-line: #e3ebe8;
+  --color-sea-50: #ecf8f5;
+  --color-sea-100: #d3efe8;
+  --color-sea-300: #8fd3c3;
+  --color-sea-500: #3aa892;
+  --color-sea-600: #2b8f7b;
+  --color-sea-700: #217262;
+  --color-sky-100: #e3effb;
+  --color-sky-300: #a9cbee;
+  --color-sky-500: #5b9bd8;
+  --color-lilac-100: #efebfb;
+  --color-lilac-300: #c9bdf0;
+  --color-lilac-500: #8d78d6;
+  --color-sun-100: #fdf4dc;
+  --color-sun-400: #f2c45b;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --shadow-soft: 0 1px 2px rgb(29 43 53 / 0.04), 0 8px 30px rgb(29 43 53 / 0.06);
+  --shadow-lift: 0 2px 6px rgb(29 43 53 / 0.05), 0 22px 50px rgb(43 143 123 / 0.14);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+::selection {
+  background: var(--color-sea-100);
+}
+
+/* Soft grain-free "aurora" used behind hero sections. */
+.aurora {
+  position: absolute;
+  inset: -20% -10% auto;
+  height: 720px;
+  pointer-events: none;
+  background:
+    radial-gradient(40% 50% at 20% 30%, rgb(143 211 195 / 0.45), transparent 70%),
+    radial-gradient(35% 45% at 80% 20%, rgb(169 203 238 / 0.45), transparent 70%),
+    radial-gradient(30% 40% at 55% 70%, rgb(201 189 240 / 0.35), transparent 70%);
+  filter: blur(10px);
+}
+.grid-dots {
+  background-image: radial-gradient(rgb(29 43 53 / 0.07) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.text-gradient {
+  background: linear-gradient(100deg, var(--color-sea-600), var(--color-sky-500) 55%, var(--color-lilac-500));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee {
+  animation: marquee 38s linear infinite;
+}
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.floaty { animation: floaty 6s ease-in-out infinite; }
+.floaty-slow { animation: floaty 9s ease-in-out infinite; }
+
+/* Policy / article pages. */
+.prose-calm h2 { font-family: var(--font-display); font-size: 1.5rem; margin: 2.2rem 0 0.8rem; color: var(--color-ink); }
+.prose-calm h3 { font-weight: 700; font-size: 1.08rem; margin: 1.6rem 0 0.5rem; }
+.prose-calm p, .prose-calm li { color: var(--color-muted); line-height: 1.8; }
+.prose-calm ul { list-style: disc; padding-left: 1.4rem; margin: 0.6rem 0; }
+.prose-calm li { margin: 0.3rem 0; }
+.prose-calm a { color: var(--color-sea-700); text-decoration: underline; text-underline-offset: 3px; }
+.prose-calm strong { color: var(--color-ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .marquee, .floaty, .floaty-slow { animation: none; }
+}
