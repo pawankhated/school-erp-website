@@ -1,0 +1,57 @@
+name: Website
+
+# Every push: type check and build. Push to main: the static site is built on
+# GitHub and the VPS runner copies it to /var/www/school/website.
+#
+# Repository settings > Secrets and variables > Actions > variables:
+#   NEXT_PUBLIC_API_URL (https://school-api.staginglabs.in)
+#   NEXT_PUBLIC_APP_URL (https://schoolapp.staginglabs.in)
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+concurrency:
+  group: school-website-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - name: Build the static site
+        env:
+          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL || 'http://localhost:3000' }}
+          NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL || 'http://localhost:8080' }}
+        run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: out
+          retention-days: 7
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: [self-hosted, school, staging]
+    timeout-minutes: 10
+    env:
+      SITE_DIR: /var/www/school/website
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: site
+      - name: Copy to the server folder
+        run: |
+          mkdir -p "$SITE_DIR"
+          rsync -a --delete --no-owner --no-group site/ "$SITE_DIR/"

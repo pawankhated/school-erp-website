@@ -1,5 +1,7 @@
 # School ERP website
 
+> **CI/CD:** every push builds; push to `main` deploys to `/var/www/school/website` (https://school.staginglabs.in). Server setup: `school-erp-api/deploy/SERVER_SETUP.md`.
+
 Public website: home, features, Smart Learning, pricing (with calculator and
 plan comparison), free-trial sign-up (mobile code, then approval by the
 company), sign-up status, about, contact, security, privacy policy, terms,
